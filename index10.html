@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gerar Token de Acesso</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+
+<h1>Gerar Token de Acesso</h1>
+
+<p>Clique no botão para gerar um token de acesso:</p>
+<button id="generateTokenButton">Gerar Token</button>
+<p>Seu token de acesso:</p>
+<p id="tokenDisplay"></p>
+
+<!-- Adicione um elemento para mostrar a mensagem de link copiado -->
+<p id="copyMessage" style="display: none; background-color: yellow;">Link gerado</p>
+
+<!-- Adicione o ícone de cópia -->
+<p>
+    <button id="copyLinkButton" style="display: none;">
+        <i class="fas fa-clipboard"></i> Copiar Link
+    </button>
+</p>
+
+<div id="pasteLinkSection" style="display: none;">
+    <p>Cole o link gerado abaixo:</p>
+    <input type="text" id="pasteLinkInput">
+    <button id="pasteLinkButton">Verificar Link</button>
+</div>
+
+<a
+    href=""
+    class="btn-whatsapp"
+    target="_blank"
+    id="whatsappButton"
+    data-aos="zoom-in-up"
+    data-aos-delay="400"
+    style="display: none;"
+>
+    <i class="fab fa-whatsapp"></i>
+    <span class="tooltip-text">Agende seu Horário</span>
+</a>
+
+<script>
+var accessLink = "";
+var whatsappLink = "";
+
+document.getElementById("generateTokenButton").addEventListener("click", function() {
+    // Gera um token aleatório simples (não recomendado para uso em situações reais)
+    var token = Math.random().toString(36).substr(2, 10); // Gera uma string alfanumérica de 10 caracteres
+    
+    // Exibe o token gerado na página
+    document.getElementById("tokenDisplay").textContent = token;
+    
+    // Cria um link de acesso usando o token gerado
+    accessLink = "https://www.example.com/access?token=" + token;
+    
+    // Adiciona um link copiável para a página
+    var copyLink = document.createElement("input");
+    copyLink.value = accessLink;
+    document.body.appendChild(copyLink);
+    copyLink.select();
+    document.execCommand("copy");
+    document.body.removeChild(copyLink);
+    
+    // Exibe a mensagem de link copiado com destaque
+    var copyMessage = document.getElementById("copyMessage");
+    copyMessage.style.display = "block"; // Exibe a mensagem
+    setTimeout(function() {
+        copyMessage.style.display = "none"; // Oculta a mensagem novamente
+    }, 2000); // 2 segundos
+    
+    // Exibe o botão de cópia
+    var copyLinkButton = document.getElementById("copyLinkButton");
+    copyLinkButton.style.display = "block";
+    
+    // Exibe o campo para colar o link e o botão de verificação
+    var pasteLinkSection = document.getElementById("pasteLinkSection");
+    pasteLinkSection.style.display = "block";
+});
+
+// Verificar o link colado antes de exibir o botão do WhatsApp
+document.getElementById("pasteLinkButton").addEventListener("click", function() {
+    var pasteLinkInput = document.getElementById("pasteLinkInput");
+    var userPastedLink = pasteLinkInput.value.trim();
+    
+    if (userPastedLink === accessLink) {
+        whatsappLink = "https://api.whatsapp.com/send?phone=Numero-telefone&text=" + encodeURIComponent("Quero fazer um agendamento hoje! " + accessLink);
+        // Exibe o botão do WhatsApp após a verificação bem-sucedida
+        var whatsappButton = document.getElementById("whatsappButton");
+        whatsappButton.href = whatsappLink;
+        whatsappButton.style.display = "block";
+    } else {
+        alert("O link colado não coincide com o link gerado. Por favor, cole o link gerado.");
+    }
+});
+</script>
+
+</body>
+</html>
